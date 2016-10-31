@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Sinal de fumaça</string>
+    <string name="type_message">Escreva uma mensagem</string>
+    <string name="prompt_name">Coloque seu nome de usuário</string>
+    <string name="img_desc">Logo do nosso app Sinal de Fumaça</string>
+    <string name="enter_login">Entrar</string>
+    <string name="doubts">Está com dúvidas?</string>
+    <string name="dialog_sign">Conectando ao Sinal de fumaça</string>
+    <string name="dialog_error_connection">Ocorreu um erro com a conexão...\nVerifique se o dispositivo esta com acesso a internet e tente novamente!</string>
+    <string name="info_msg">Para entrar no Sinal de fumaça, basta digitar um nome de usuário e será levado para a sala de bate papo.\n\nCaso tenha utilizado o app antes, basta digitar o nome que já utilizou.</string>
+</resources>
