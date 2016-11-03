@@ -1,23 +1,30 @@
 package com.rflpazini.sdf.activities;
 
+import android.nfc.Tag;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.rflpazini.sdf.model.Message;
 import com.rflpazini.sdf.R;
 import com.rflpazini.sdf.utils.ChatAdapter;
+import com.rflpazini.sdf.utils.SendMessage;
+import com.rflpazini.sdf.utils.UserLocalInfo;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
+
+    private static final String TAG = ChatActivity.class.getSimpleName();
 
     private FloatingActionButton sendMessage;
     private EditText typedMessage;
@@ -53,10 +60,14 @@ public class ChatActivity extends AppCompatActivity {
                 msg.setMsgBody(message);
                 msg.setMsgDate(DateFormat.getDateTimeInstance().format(new Date()));
                 msg.setItsMe(true);
+                msg.setMsgFrom(new UserLocalInfo(getApplicationContext()).getuName());
+
                 typedMessage.setText("");
                 history.add(msg);
-
                 displayMessages(msg);
+
+                Gson gMessage = new Gson();
+                new SendMessage().execute(gMessage.toJson(msg));
             }
         });
     }
@@ -77,8 +88,8 @@ public class ChatActivity extends AppCompatActivity {
         Message msg = new Message();
         msg.setId(1);
         msg.setItsMe(false);
-        msg.setMsgBody("Mota não come cu, só pensa em breja e coisa de playboy");
-        msg.setMsgFrom("Irajá");
+        msg.setMsgBody("Precisamos nos falar urgente");
+        msg.setMsgFrom("John Doe");
         msg.setMsgDate(DateFormat.getDateTimeInstance().format(new Date()));
         history.add(msg);
 

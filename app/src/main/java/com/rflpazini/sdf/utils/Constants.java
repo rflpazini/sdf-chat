@@ -5,8 +5,9 @@ package com.rflpazini.sdf.utils;
  */
 
 public class Constants {
-    public static final String AUTH_USER_API_URL = "http://192.168.1.100:8087/MessagesAPI/webresources/users/auth/";
-    public static final String PUSH_USER_API_URL = "http://192.168.1.100:8087/MessagesAPI/webresources/users";
+    public static final String AUTH_USER_API_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/users/auth/";
+    public static final String PUSH_USER_API_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/users";
+    public static final String MESSAGE_POST_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/messages/add";
 
     /**
      * CONNECTION TYPES API
@@ -15,4 +16,6 @@ public class Constants {
     public static final String POST_REQUEST = "POST";
     public static final String DELETE_REQUEST = "DELETE";
     public static final String PUT_REQUEST = "PUT";
+
+    public static final String USER_LOCAL_INFO = "user_login_info";
 }

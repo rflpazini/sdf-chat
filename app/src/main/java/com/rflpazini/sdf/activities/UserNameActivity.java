@@ -3,6 +3,7 @@ package com.rflpazini.sdf.activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.rflpazini.sdf.model.User;
 import com.rflpazini.sdf.R;
 import com.rflpazini.sdf.utils.Constants;
 import com.rflpazini.sdf.utils.Dialogs;
+import com.rflpazini.sdf.utils.UserLocalInfo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -114,11 +116,17 @@ public class UserNameActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             if (response == null) {
                 new Dialogs().errorMessage(UserNameActivity.this, getString(R.string.dialog_error_connection));
-                Log.e(TAG+"response", "There was an error with the resquest \nThe response of this is " + response);
+                Log.e(TAG + "response", "There was an error with the resquest \nThe response of this is " + response);
             } else {
-                Log.i(TAG+":Response", response);
                 Gson g = new Gson();
                 User user = g.fromJson(response, User.class);
+
+                SharedPreferences localPreferences = getSharedPreferences(Constants.USER_LOCAL_INFO, 0);
+                SharedPreferences.Editor editor = localPreferences.edit();
+                editor.putInt("id", user.getId());
+                editor.putString("userName", user.getUserName());
+                editor.putString("token", user.getUserToken());
+                editor.commit();
 
                 Intent chatIntent = new Intent(UserNameActivity.this, ChatActivity.class);
                 startActivity(chatIntent);
