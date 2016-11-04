@@ -1,6 +1,8 @@
 package com.rflpazini.sdf.activities;
 
-import android.nfc.Tag;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,12 +17,23 @@ import com.google.gson.Gson;
 import com.rflpazini.sdf.model.Message;
 import com.rflpazini.sdf.R;
 import com.rflpazini.sdf.utils.ChatAdapter;
+import com.rflpazini.sdf.utils.Constants;
 import com.rflpazini.sdf.utils.SendMessage;
 import com.rflpazini.sdf.utils.UserLocalInfo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -30,6 +43,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText typedMessage;
     private ListView messagesContainer;
     private ArrayList<Message> history;
+    private ArrayList<Message> serverHistory;
     private ChatAdapter adapter;
 
     @Override
@@ -42,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
 
-        loadDummyHistory();
+        loadServerHistory();
         setListeners();
     }
 
@@ -82,23 +96,99 @@ public class ChatActivity extends AppCompatActivity {
         messagesContainer.setSelection(messagesContainer.getCount() - 1);
     }
 
-    private void loadDummyHistory() {
+    private void loadServerHistory() {
+        serverHistory = new ArrayList<Message>();
         history = new ArrayList<Message>();
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
 
-        Message msg = new Message();
-        msg.setId(1);
-        msg.setItsMe(false);
-        msg.setMsgBody("Precisamos nos falar urgente");
-        msg.setMsgFrom("John Doe");
-        msg.setMsgDate(DateFormat.getDateTimeInstance().format(new Date()));
-        history.add(msg);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            new RetrieveMessages().execute();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, 2000);
+        history = serverHistory;
 
         adapter = new ChatAdapter(ChatActivity.this, new ArrayList<Message>());
         messagesContainer.setAdapter(adapter);
+    }
 
-        for (int i = 0; i < history.size(); i++) {
-            Message message = history.get(i);
-            displayMessages(message);
+    public class RetrieveMessages extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL url = new URL(Constants.MESSAGE_GET_URL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod(Constants.GET_REQUEST);
+                httpURLConnection.connect();
+
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+
+                    return stringBuilder.toString();
+                } finally {
+                    httpURLConnection.disconnect();
+                }
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            System.out.println("RESPONSE: " + s);
+            transformJson(s);
+            updateLocalMessages();
+        }
+    }
+
+    protected void transformJson(String s) {
+        try {
+            JSONArray jsonArray = new JSONArray(s);
+            serverHistory = new ArrayList<Message>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject g = jsonArray.getJSONObject(i);
+                Message msg = new Message();
+                msg.setId(Integer.valueOf(g.getString("id")));
+                msg.setMsgBody(g.getString("msgBody"));
+                msg.setMsgDate(g.getString("msgDate"));
+                msg.setMsgFrom(g.getString("msgFrom"));
+                serverHistory.add(msg);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    protected void updateLocalMessages() {
+        int ss, hs, def = 0;
+        ss = serverHistory.size();
+        hs = history.size();
+        if (ss != hs) {
+            def = ss - hs;
+            for (int i = ss - def; i < ss; i++) {
+                Message msg = serverHistory.get(i);
+                history.add(msg);
+                displayMessages(msg);
+            }
         }
     }
 }

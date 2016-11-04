@@ -5,9 +5,10 @@ package com.rflpazini.sdf.utils;
  */
 
 public class Constants {
-    public static final String AUTH_USER_API_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/users/auth/";
-    public static final String PUSH_USER_API_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/users";
-    public static final String MESSAGE_POST_URL = "http://192.168.1.102:8087/MessagesAPI/webresources/messages/add";
+    public static final String AUTH_USER_API_URL = "http://192.168.1.107:8087/MessagesAPI/webresources/users/auth/";
+    public static final String PUSH_USER_API_URL = "http://192.168.1.107:8087/MessagesAPI/webresources/users";
+    public static final String MESSAGE_POST_URL = "http://192.168.1.107:8087/MessagesAPI/webresources/messages/add";
+    public static final String MESSAGE_GET_URL = "http://192.168.1.107:8087/MessagesAPI/webresources/messages";
 
     /**
      * CONNECTION TYPES API

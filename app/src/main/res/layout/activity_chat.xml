@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/chatSendButton"
-            android:inputType="textCapSentences"
+            android:inputType="textCapCharacters"
             android:hint="@string/type_message"
             android:padding="@dimen/activity_horizontal_margin" />
 
