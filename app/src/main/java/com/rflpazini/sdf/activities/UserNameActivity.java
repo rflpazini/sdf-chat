@@ -121,13 +121,17 @@ public class UserNameActivity extends AppCompatActivity {
                 Gson g = new Gson();
                 User user = g.fromJson(response, User.class);
 
-                SharedPreferences localPreferences = getSharedPreferences(Constants.USER_LOCAL_INFO, 0);
-                SharedPreferences.Editor editor = localPreferences.edit();
-                editor.putInt("id", user.getId());
-                editor.putString("userName", user.getUserName());
-                editor.putString("token", user.getUserToken());
-                editor.commit();
+                try {
+                    SharedPreferences localPreferences = getSharedPreferences(Constants.USER_LOCAL_INFO, 0);
+                    SharedPreferences.Editor editor = localPreferences.edit();
+                    editor.putInt("id", user.getId());
+                    editor.putString("userName", user.getUserName());
+                    editor.putString("token", user.getUserToken());
+                    editor.commit();
 
+                }catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 Intent chatIntent = new Intent(UserNameActivity.this, ChatActivity.class);
                 startActivity(chatIntent);
                 UserNameActivity.this.finish();

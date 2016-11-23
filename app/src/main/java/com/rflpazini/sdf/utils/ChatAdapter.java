@@ -124,6 +124,7 @@ public class ChatAdapter extends BaseAdapter {
             layoutParams = (LinearLayout.LayoutParams) holder.txtInfo.getLayoutParams();
             layoutParams.gravity = Gravity.LEFT;
             holder.txtInfo.setLayoutParams(layoutParams);
+            holder.txtInfo.setVisibility(View.VISIBLE);
         }
     }
 

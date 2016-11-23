@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:paddingTop="6dp"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ListView
             android:id="@+id/messagesContainer"
@@ -17,9 +20,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/messageEdit"
             android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp"
             android:divider="@null"
             android:listSelector="@android:color/transparent"
             android:transcriptMode="alwaysScroll" />
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/chatSendButton"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapSentences"
             android:hint="@string/type_message"
             android:padding="@dimen/activity_horizontal_margin" />
 

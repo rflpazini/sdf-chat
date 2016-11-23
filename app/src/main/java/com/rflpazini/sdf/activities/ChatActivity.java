@@ -89,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
     private void displayMessages(Message msg) {
         adapter.add(msg);
         adapter.notifyDataSetChanged();
+
         scroll();
     }
 
@@ -99,6 +100,9 @@ public class ChatActivity extends AppCompatActivity {
     private void loadServerHistory() {
         serverHistory = new ArrayList<Message>();
         history = new ArrayList<Message>();
+        adapter = new ChatAdapter(ChatActivity.this, new ArrayList<Message>());
+        messagesContainer.setAdapter(adapter);
+
         final Handler handler = new Handler();
         Timer timer = new Timer();
 
@@ -110,7 +114,7 @@ public class ChatActivity extends AppCompatActivity {
                         try {
                             new RetrieveMessages().execute();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Log.e(TAG, e.getMessage(), e);
                         }
                     }
                 });
@@ -118,9 +122,6 @@ public class ChatActivity extends AppCompatActivity {
         };
         timer.schedule(task, 0, 2000);
         history = serverHistory;
-
-        adapter = new ChatAdapter(ChatActivity.this, new ArrayList<Message>());
-        messagesContainer.setAdapter(adapter);
     }
 
     public class RetrieveMessages extends AsyncTask<Void, Void, String> {
@@ -146,6 +147,7 @@ public class ChatActivity extends AppCompatActivity {
                     httpURLConnection.disconnect();
                 }
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 return null;
             }
         }
@@ -167,15 +169,15 @@ public class ChatActivity extends AppCompatActivity {
                 JSONObject g = jsonArray.getJSONObject(i);
                 Message msg = new Message();
                 msg.setId(Integer.valueOf(g.getString("id")));
+                msg.setMsgFrom(g.getString("msgFrom"));
                 msg.setMsgBody(g.getString("msgBody"));
                 msg.setMsgDate(g.getString("msgDate"));
-                msg.setMsgFrom(g.getString("msgFrom"));
+
                 serverHistory.add(msg);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
-
     }
 
     protected void updateLocalMessages() {
