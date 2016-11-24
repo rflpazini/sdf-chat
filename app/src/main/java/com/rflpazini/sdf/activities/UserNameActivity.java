@@ -124,7 +124,9 @@ public class UserNameActivity extends AppCompatActivity {
                 try {
                     SharedPreferences localPreferences = getSharedPreferences(Constants.USER_LOCAL_INFO, 0);
                     SharedPreferences.Editor editor = localPreferences.edit();
-                    editor.putInt("id", user.getId());
+                    if (user.getId() > 0) {
+                        editor.putInt("id", user.getId());
+                    }
                     editor.putString("userName", user.getUserName());
                     editor.putString("token", user.getUserToken());
                     editor.commit();

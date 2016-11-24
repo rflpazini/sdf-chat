@@ -45,13 +45,13 @@ public class SendMessage extends AsyncTask<String, Void, String> {
                 httpURLConnection.disconnect();
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             return null;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             return null;
         }
     }

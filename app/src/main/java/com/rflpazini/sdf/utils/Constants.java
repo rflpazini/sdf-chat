@@ -5,7 +5,7 @@ package com.rflpazini.sdf.utils;
  */
 
 public class Constants {
-    public static final String WS_PORT = "http:/192.168.1.104:8087";
+    public static final String WS_PORT = "http://192.168.1.103:8087";
     public static final String AUTH_USER_API_URL = WS_PORT + "/MessagesAPI/api/users/auth/";
     public static final String MESSAGE_POST_URL = WS_PORT + "/MessagesAPI/api/messages/add";
     public static final String MESSAGE_GET_URL = WS_PORT + "/MessagesAPI/api/messages";
